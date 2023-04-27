@@ -17,14 +17,33 @@ class ContactController {
 
   async listContacts(request, response) {
     await database("contacts")
+      .select("contacts.*", "phonenumbers.number")
       .leftJoin("phonenumbers", "contacts.id", "phonenumbers.contact_id")
-      .select(
-        "contacts.id",
-        "contacts.name",
-        "contacts.address",
-        "phonenumbers.number"
-      )
-      .then((contacts) => response.json(contacts))
+      .then((contacts) => {
+        for (let i = 0; i < contacts.length; i++) {
+          if (i === 0) {
+            continue;
+          } else {
+            let id = contacts[i - 1].id;
+
+            if (contacts[i].id === id) {
+              if (typeof contacts[i - 1].number === "string") {
+                contacts[i - 1].number = [
+                  contacts[i - 1].number,
+                  contacts[i].number,
+                ];
+              } else {
+                contacts[i - 1].number = [
+                  ...contacts[i - 1].number,
+                  contacts[i].number,
+                ];
+              }
+              contacts.splice(i, 1);
+            }
+          }
+        }
+        return response.json(contacts);
+      })
       .catch((error) => {
         console.log(error);
       });
