@@ -1,4 +1,4 @@
-# treinee-creativecode-2023
+# trainee-creativecode-2023
 Basic CRUD with Express and MySQL (Relation 1:N)
 
 Hi!
