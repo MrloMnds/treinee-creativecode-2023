@@ -1,4 +1,4 @@
-const database = require("../database/connection");
+const database = require("../database/connection.js");
 
 class ContactController {
   newContact(request, response) {
